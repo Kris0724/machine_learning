@@ -158,10 +158,10 @@ def clusterClubs(numClust=5):
     #exit(0)
 
     myCentroids, clustAssing = biKmeans(datMat, numClust, distMeas=distSLC)
-    #print myCentroids
-    #print
-    #print clustAssing
-    #exit(0)
+    print myCentroids
+    print
+    print len(clustAssing)
+    exit(0)
 
     fig = plt.figure()
     rect=[0.1,0.1,0.8,0.8]

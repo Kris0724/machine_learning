@@ -22,7 +22,9 @@ from sklearn.preprocessing import StandardScaler
 centers = [[1, 1], [-1, -1], [1, -1]]
 X, labels_true = make_blobs(n_samples=750, centers=centers, cluster_std=0.4,
                             random_state=0)
-
+#print X
+#print labels_true
+#exit(0)
 X = StandardScaler().fit_transform(X)
 
 ##############################################################################
@@ -31,7 +33,8 @@ db = DBSCAN(eps=0.3, min_samples=10).fit(X)
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
 labels = db.labels_
-
+#print labels
+#exit(0)
 # Number of clusters in labels, ignoring noise if present.
 n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
 

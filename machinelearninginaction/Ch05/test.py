@@ -13,6 +13,7 @@ import logRegres
 #weights = logRegres.stocGradAscent1(array(dataArr), labelMat)
 #logRegres.plotBestFit(weights)
 
+'''
 f_train = open('horseColicTraining.txt')
 trainingSet = []
 trainingLabels = []
@@ -58,6 +59,8 @@ for i in range(t_len):
 print "test_err=",test_err
 print "test sum=",t_len
 #print yHat
+'''
 
+logRegres.multiTest()
 
 

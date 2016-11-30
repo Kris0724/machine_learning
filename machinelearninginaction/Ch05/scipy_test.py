@@ -23,6 +23,27 @@ def readfile1(filename):
 		label_mat.append(float(arr[-1]))		
 	return data_mat,label_mat
 
+def readfile2(filename):
+    data_mat = []
+    label_mat = []
+    for line in open(filename):
+        line = line.strip('\n').strip('\r')
+        arr = line.split('\t')
+        #print len(arr)
+        #data_mat.append(float(arr[0:21]))
+        tmp_arr = []
+        for i in range(0, 21):
+            tmp_arr.append(float(arr[i]))
+        data_mat.append(tmp_arr)
+        label_mat.append(float(arr[-1])) 
+        #break
+    return data_mat,label_mat       
+
+#data,label = readfile2('horseColicTraining.txt')
+#print data
+#print label
+#exit(0)
+
 from sklearn import cross_validation
 from sklearn import linear_model
 from sklearn import tree
@@ -40,8 +61,10 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.neighbors import NearestNeighbors
 
 #data_mat, label_mat = readfile1('./bak/iris.data.all')
-data_mat, label_mat = readfile1('./bak/iris.data.svm.train')
-data_mat2, label_mat2 = readfile1('./bak/iris.data.svm.test')
+#data_mat, label_mat = readfile1('./bak/iris.data.svm.train')
+data_mat, label_mat = readfile2('./horseColicTraining.txt')
+#data_mat2, label_mat2 = readfile1('./bak/iris.data.svm.test')
+data_mat2, label_mat2 = readfile2('./horseColicTest.txt')
 
 ###  ADABOOST
 '''
@@ -90,12 +113,18 @@ print scores
 ###  LOGISTIC REGRESSION
 
 from sklearn.linear_model import LogisticRegression
-clf = LogisticRegression(C=0.01)
+#clf = LogisticRegression(C=0.01)
+#clf = LogisticRegression(C=0.1)
+#clf = LogisticRegression(C=1.0)
+clf = LogisticRegression(C=0.01, penalty='l1')
 clf.fit(data_mat, label_mat)
-predict_labels = clf.predict(data_mat)
-print predict_labels
-predict_labels = clf.predict(data_mat2)
-print predict_labels
+#print clf.coef_
+#print clf.intercept_
+#print clf.n_iter_
+#predict_labels = clf.predict(data_mat)
+#print predict_labels
+#predict_labels = clf.predict(data_mat2)
+#print predict_labels
 print clf.score(data_mat, label_mat)
 print clf.score(data_mat2, label_mat2)
 scores = cross_val_score(clf, data_mat, label_mat)

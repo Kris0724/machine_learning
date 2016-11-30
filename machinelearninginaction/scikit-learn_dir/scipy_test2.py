@@ -1,28 +1,5 @@
 from numpy import *
 #import sys
-
-def readfile1(filename):
-	#f = open('iris.data.all')
-	f = open(filename)
-	line = f.readline()
-	num_feat = len(line.split(',')) - 1
-	data_mat = []
-	label_mat = []
-	#f2 = open('iris.data.all')
-	f2 = open(filename)
-	for line in f2.readlines():
-		if line.strip() == '':
-			line = f.readline()
-			continue
-		line = line.strip('\n')
-		arr = line.split(',')
-		f_arr = []
-		for i in range(num_feat):
-			f_arr.append(float(arr[i]))
-		data_mat.append(f_arr)
-		label_mat.append(float(arr[-1]))		
-	return data_mat,label_mat
-
 from sklearn import cross_validation
 from sklearn import linear_model
 from sklearn import tree
@@ -38,10 +15,46 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neighbors import NearestNeighbors
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+def readfile1(filename):
+	#f = open('iris.data.all')
+	f = open(filename)
+	line = f.readline()
+	num_feat = len(line.split('\t')) - 1
+	data_mat = []
+	label_mat = []
+	#f2 = open('iris.data.all')
+	f2 = open(filename)
+	for line in f2.readlines():
+		if line.strip() == '':
+			line = f.readline()
+			continue
+		line = line.strip('\n')
+		arr = line.split('\t')
+		f_arr = []
+		for i in range(num_feat):
+			f_arr.append(float(arr[i]))
+		data_mat.append(f_arr)
+		label_mat.append(int(float(arr[-1])))		
+	return data_mat,label_mat
 
 #data_mat, label_mat = readfile1('./bak/iris.data.all')
-data_mat, label_mat = readfile1('./bak/iris.data.svm.train')
-data_mat2, label_mat2 = readfile1('./bak/iris.data.svm.test')
+data_mat, label_mat = readfile1('./horseColicTraining.txt')
+data_mat2, label_mat2 = readfile1('./horseColicTest.txt')
+#print data_mat
+#print label_mat
+#exit(0)
+
+### GBDT
+#clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3).fit(data_mat, label_mat)
+#print clf.score(data_mat2, label_mat2)
+
+### RF
+rfc = ensemble.RandomForestClassifier(n_estimators=10, criterion='gini', max_features="auto", min_samples_split=1).fit(data_mat, label_mat)
+print rfc.score(data_mat2, label_mat2)
 
 ###  ADABOOST
 '''
@@ -88,19 +101,18 @@ print scores
 '''
 
 ###  LOGISTIC REGRESSION
-
-from sklearn.linear_model import LogisticRegression
+'''
 clf = LogisticRegression(C=0.01)
 clf.fit(data_mat, label_mat)
 predict_labels = clf.predict(data_mat)
-print predict_labels
+#print predict_labels
 predict_labels = clf.predict(data_mat2)
-print predict_labels
+#print predict_labels
 print clf.score(data_mat, label_mat)
 print clf.score(data_mat2, label_mat2)
 scores = cross_val_score(clf, data_mat, label_mat)
 print scores
-
+'''
 
 ###  NAIVE BAYES
 '''
@@ -171,11 +183,11 @@ print scores
 '''
 
 '''
-#clf = SVC(kernel='rbf')
+clf = SVC(kernel='rbf')
 #clf = SVC(kernel='linear')
 #clf = NuSVC()
 #clf = LinearSVC()
-clf = svm.SVR()
+#clf = svm.SVR()
 clf.fit(data_mat, label_mat)
 print clf.predict(data_mat)
 print clf.predict(data_mat2)
@@ -185,6 +197,11 @@ print clf.score(data_mat2, label_mat2)
 scores = cross_val_score(clf, data_mat, label_mat)
 print scores
 '''
+
+
+
+
+
 
 #---------------------------------------------------
 
@@ -221,31 +238,12 @@ print("svm classifier accuracy:")
 print(svc_scores)
 '''
 
-
-#data,label = readfile1('iris.data.svm.train')
-#print data
-#print
-#print label
-#exit(0)
-#print mat(data).shape
-#print mat(label).transpose().shape
-
-#data2,label2 = readfile1('iris.data.svm.test')
-#print data2
-#print
-##print label2
-#exit(0)
-
-#print unique(label)
-
 '''
 from sklearn import svm
 #clf = svm.LinearSVC()
 svc = svm.SVC(kernel='rbf')
 #clf.fit(data, label)
 print svc.fit(data, label)
-
-
 err_count = 0
 m,n = shape(data)
 for i in range(m):
@@ -255,7 +253,6 @@ for i in range(m):
 		err_count +=1
 print "train err=", err_count
 print "train sum=", m
-
 m,n = shape(data2)
 err_count = 0
 for i in range(m):
@@ -266,52 +263,6 @@ for i in range(m):
 print "test err=", err_count
 print "test sum=", m
 '''
-
-
-#from sklearn import neighbors
-#knn = neighbors.KNeighborsClassifier()
-#knn.fit(data, label) 
-
-'''
-err_count = 0
-m,n = shape(data)
-for i in range(m):
-	predict = knn.predict(data[i])
-	if predict != label[i]:
-		err_count +=1
-print "train err=", err_count
-print "train sum=", m
-
-m,n = shape(data2)
-err_count = 0
-for i in range(m):
-	predict = knn.predict(data[i])
-	if predict != label2[i]:
-		err_count += 1
-print "test err=", err_count
-print "test sum=", m
-'''
-#print mat(label).size
-#perm = random.permutation(mat(label).size)
-#print perm
-#data_mat = mat(data)
-#data_mat = data_mat[perm]
-#knn.fit(data_mat[:60], label[:60]) 
-#print knn.score(data_mat[60:], label[60:]) 
-
-'''
-from sklearn import cluster
-k_means = cluster.KMeans(2)
-print k_means.fit(data)
-print k_means.labels_
-print label
-'''
-
-
-
-
-
-
 
 
 

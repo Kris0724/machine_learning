@@ -3,7 +3,7 @@ import regression
 
 from numpy import *
 #xArr, yArr = regression.loadDataSet('ex0.txt')
-#xArr, yArr = regression.loadDataSet('ex1.txt')
+xArr, yArr = regression.loadDataSet('ex1.txt')
 #xArr, yArr = regression.loadDataSet('map_data2.txt')
 #print xArr
 #print
@@ -78,14 +78,26 @@ plt.show()
 #print 
 #ws = regression.standRegres(xArr, yArr)
 #print ws
-#yHat = regression.lwlrTest(xArr, xArr, yArr, 1.0)
-#print
+#yHat = regression.lwlrTest(xArr, xArr, yArr, 0.3)
+#yHat = regression.lwlrTest(xArr, xArr, yArr, 0.001)
+#print regression.rssError(yArr[:], yHat.T)
+#yHat = regression.lwlrTest(xArr, xArr, yArr, 0.003)
+#print regression.rssError(yArr[:], yHat.T)
+yHat = regression.lwlrTest(xArr, xArr, yArr, 0.01)
+#print regression.rssError(yArr[:], yHat.T)
+#print yHat
+#yHat = regression.lwlrTest(xArr, xArr, yArr, 0.1)
+#print regression.rssError(yArr[:], yHat.T)
+#yHat = regression.lwlrTest(xArr, xArr, yArr, 1)
+print regression.rssError(yArr[:], yHat.T)
+#exit(0)
+
 #yHat = regression.lwlrTest(xArr, xArr, yArr, 0.01)
 #print
-#print regression.lwlrTest(xArr, xArr, yArr, 0.003)
+#yHat = regression.lwlrTest(xArr, xArr, yArr, 0.003)
 #print
 
-'''
+
 xMat = mat(xArr)
 srtInd = xMat[:,1].argsort(0)
 xSort = xMat[srtInd][:,0,:]
@@ -95,7 +107,7 @@ ax = fig.add_subplot(111)
 ax.plot(xSort[:,1], yHat[srtInd])
 ax.scatter(xMat[:,1].flatten().A[0], mat(yArr).T.flatten().A[0], s=2, c='red')
 plt.show()
-'''
+
 
 #yHat1 = regression.lwlrTest(xArr, xArr, yArr, 1.0)
 #print regression.rssError(yArr[:], yHat1.T)
@@ -114,7 +126,7 @@ plt.show()
 #print yHat
 
 
-
+'''
 abX, abY = regression.loadDataSet('abalone.txt')
 yHat01 = regression.lwlrTest(abX[0:99], abX[0:99], abY[0:99], 0.1)
 yHat1 = regression.lwlrTest(abX[0:99], abX[0:99], abY[0:99], 1)
@@ -136,7 +148,7 @@ yHat10 = regression.lwlrTest(abX[100:199], abX[0:99], abY[0:99], 10)
 print regression.rssError(abY[100:199], yHat01.T)
 print regression.rssError(abY[100:199], yHat1.T)
 print regression.rssError(abY[100:199], yHat10.T)
-
+'''
 
 
 

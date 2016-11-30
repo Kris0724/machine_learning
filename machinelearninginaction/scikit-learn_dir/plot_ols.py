@@ -37,6 +37,8 @@ diabetes_X = diabetes.data[:, np.newaxis]
 #print diabetes_X
 #exit(0)
 diabetes_X_temp = diabetes_X[:, :, 2]
+print diabetes_X_temp
+exit(0)
 
 # Split the data into training/testing sets
 diabetes_X_train = diabetes_X_temp[:-20]
@@ -51,6 +53,10 @@ regr = linear_model.LinearRegression()
 
 # Train the model using the training sets
 regr.fit(diabetes_X_train, diabetes_y_train)
+print regr.coef_
+print regr.intercept_
+exit(0)
+
 
 # The coefficients
 print('Coefficients: \n', regr.coef_)
