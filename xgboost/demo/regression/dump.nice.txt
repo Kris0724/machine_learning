@@ -1,0 +1,28 @@
+booster[0]:
+0:[MMAX<22486] yes=1,no=2,missing=1
+	1:[CACH<28] yes=3,no=4,missing=3
+		3:[MMAX<10001] yes=7,no=8,missing=7
+			7:leaf=29.2258
+			8:leaf=66.88
+		4:[CACH<97] yes=9,no=10,missing=9
+			9:leaf=106.348
+			10:leaf=194.917
+	2:[MMAX<48001] yes=5,no=6,missing=5
+		5:[CACH<57] yes=11,no=12,missing=11
+			11:leaf=166.273
+			12:leaf=349.179
+		6:leaf=673.375
+booster[1]:
+0:[CACH<81] yes=1,no=2,missing=1
+	1:[MMIN<4621] yes=3,no=4,missing=3
+		3:[CHMIN<11] yes=7,no=8,missing=7
+			7:leaf=-0.967454
+			8:leaf=-33.8347
+		4:[vendor=ibm] yes=10,no=9
+			9:leaf=14.3699
+			10:leaf=87.0657
+	2:[MMAX<48001] yes=5,no=6,missing=5
+		5:[MYCT<81] yes=11,no=12,missing=11
+			11:leaf=86.3795
+			12:leaf=-24.2778
+		6:leaf=237.083
