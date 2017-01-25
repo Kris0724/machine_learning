@@ -16,11 +16,12 @@ dtest = xgb.DMatrix('./dirty_neg_test.txt')
 # specify parameters via map, definition are same as c++ version
 #param = {'max_depth':2, 'eta':1, 'silent':1, 'objective':'binary:logistic' }
 #param = {'booster':'gbtree', 'max_depth':2, 'eta':1, 'silent':1, 'objective':'binary:logistic' }
-param = {'booster':'gbtree', 'max_depth':420, 'eta':0.3, 'silent':1, 'objective':'binary:logistic' }
+#param = {'booster':'gbtree', 'max_depth':420, 'eta':0.3, 'silent':1, 'objective':'binary:logistic' }
+param = {'booster':'gbtree', 'max_depth':6, 'eta':0.3, 'silent':1, 'objective':'binary:logistic' }
 
 # specify validations set to watch performance
 watchlist  = [(dtest,'eval'), (dtrain,'train')]
-num_round = 2
+num_round = 100
 
 bst = xgb.train(param, dtrain, num_round, watchlist)
 
