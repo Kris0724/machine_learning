@@ -133,6 +133,8 @@ typedef struct
  int gbdt_single_tree_estimation(double *x_fea_value, double *y_gradient, 
    gbdt_info_t gbdt_inf, bufset* data_set, 
    int* index, gbdt_tree_t* gbdt_single_tree, int nrnodes );
+
+int gbdt_tree_dfs(gbdt_tree_t *gbdt_single_tree);
  
  /*
  * @brief 使用Gradient Boosting Decision Tree模型进行回归预测

@@ -21,7 +21,7 @@ LIB =-L$(LIBHOME)/ullib/lib \
 CC = g++
 
 CPPFLAGS = -g -Wall -D_REENTRANT -O3 -fPIC
-DEBUG_CPPFLAGS = -g -Wall -fPIC -D_REENTRANT -DDEBUG_ON -DFILE_DUMP_ON
+#DEBUG_CPPFLAGS = -g -Wall -fPIC -D_REENTRANT -DDEBUG_ON -DFILE_DUMP_ON
 
 all : libgbdt.a gbdt-train gbdt-test gbdt.so output
 

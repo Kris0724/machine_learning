@@ -1,8 +1,12 @@
 #include "gradient_boosting.h"
-
+#include <stdio.h>
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <stack>
+#include <queue>
+#include <sstream>
+
 using namespace std;
 
 int max_feature_label(string line)
@@ -400,10 +404,14 @@ int gbdt_regression_predict(gbdt_model_t* gbdt_model, double *x_test, double& yp
  	{
 		if(gbdt_model->reg_forest[i] != NULL)
  		{
-			if(gbdt_tree_predict(x_test, gbdt_model->reg_forest[i], ypredict, gbdt_model->info.shrink) != 0)
+			//if(gbdt_tree_predict(x_test, gbdt_model->reg_forest[i], ypredict, gbdt_model->info.shrink) != 0)
+			int res = gbdt_tree_predict(x_test, gbdt_model->reg_forest[i], ypredict, gbdt_model->info.shrink);
+			if(res == -1)
 			{
 			return -1;
 			}
+            cout << "vs1:" << res << endl;
+            gbdt_tree_dfs(gbdt_model->reg_forest[i]);
  		}
  		else
 			return -1;
@@ -418,6 +426,7 @@ int gbdt_tree_predict(double *x_test, gbdt_tree_t *gbdt_single_tree, double& ypr
 		LOG_ERROR_("Parameter error.");
 		return -1;
  	}
+    //gbdt_tree_dfs(gbdt_single_tree); 
  	int k = 0;
  	while (gbdt_single_tree->nodestatus[k] != GBDT_TERMINAL) 
  	{ /* go down the tree */
@@ -432,10 +441,49 @@ int gbdt_tree_predict(double *x_test, gbdt_tree_t *gbdt_single_tree, double& ypr
  		}
  	}
  	ypred += shrink * gbdt_single_tree->ndavg[k];
+    return k;
+    //Kris
+ 	//return 0;
+}
 
+int gbdt_tree_dfs(gbdt_tree_t *gbdt_single_tree)
+{
+    stack<int> node_stack;
+    vector<int> leaf_vec;
+	if(gbdt_single_tree == NULL)
+ 	{
+		LOG_ERROR_("Parameter error.");
+		return -1;
+ 	}
+ 	int k = 0;
+    node_stack.push(k);
+ 	while (!node_stack.empty()) 
+ 	{ /* go down the tree */
+        k = node_stack.top();
+        node_stack.pop();
+        if (gbdt_single_tree->nodestatus[k] == GBDT_TERMINAL)
+        {
+            leaf_vec.push_back(k);
+            continue;
+        }
+		int tmp = gbdt_single_tree->rson[k];
+        node_stack.push(tmp);
+		tmp = gbdt_single_tree->lson[k];
+        node_stack.push(tmp);
+ 	}
+    vector<int>::iterator iter = leaf_vec.begin();
+    string vs = "";
+    for (; iter != leaf_vec.end(); ++iter) 
+    {
+        stringstream stream;
+        stream<<(*iter);
+        vs += "-";
+        vs += stream.str();
+    }
+    cout << "vs2:" << vs << endl;
  	return 0;
 }
-  
+ 
 /*************************************************************************
 * training function
 *************************************************************************/
@@ -523,6 +571,7 @@ int read_conf_file(gbdt_info_t& infbox, int argc, char* argv[])
 					LOG_ERROR_("Get random_feature_ratio config error.");
 					return -1;
  				}
+                printf("sample_feature_ratio = %lf\n", random_feature_ratio);
  				break;
 			case 't':
 				if(sscanf(optarg, "%d", &infbox.tree_num) != 1)
@@ -530,6 +579,7 @@ int read_conf_file(gbdt_info_t& infbox, int argc, char* argv[])
 					LOG_ERROR_("Get tree_num config error.");
 					return -1;
  				}
+                printf("tree_num = %d\n", infbox.tree_num);
 				break;
  			case 's':
 				if(sscanf(optarg, "%lf", &infbox.shrink) != 1)
@@ -537,6 +587,7 @@ int read_conf_file(gbdt_info_t& infbox, int argc, char* argv[])
 					LOG_ERROR_("Get shrink config error.");
 					return -1;
  				}
+                printf("shrink = %lf\n", infbox.shrink);
  				break;
 			case 'n':
  				if(sscanf(optarg, "%d", &infbox.gbdt_min_node_size) != 1)
@@ -544,6 +595,7 @@ int read_conf_file(gbdt_info_t& infbox, int argc, char* argv[])
 					LOG_ERROR_("Get min_node_size config error.");
 					return -1;
 				}
+                printf("gbdt_min_node_size = %d\n", infbox.gbdt_min_node_size);
 				break;
  			case 'd':
  				if(sscanf(optarg, "%d", &infbox.gbdt_max_depth) != 1)
@@ -551,6 +603,7 @@ int read_conf_file(gbdt_info_t& infbox, int argc, char* argv[])
 					LOG_ERROR_("Get max_depth config error.");
 					return -1;
  				}
+                printf("gbdt_max_depth = %d\n", infbox.gbdt_max_depth);
  				break;
  			case 'm':
  				if(strlen(optarg) <= BUFFER_LENGTH)
@@ -560,6 +613,7 @@ int read_conf_file(gbdt_info_t& infbox, int argc, char* argv[])
 					LOG_ERROR_("Get model_filename config error.");
 					return -1;
  				}
+                printf("model_filename = %s\n", infbox.model_filename);
  				break;
  			case 'f':
  				if(strlen(optarg) <= BUFFER_LENGTH)
@@ -569,6 +623,7 @@ int read_conf_file(gbdt_info_t& infbox, int argc, char* argv[])
 					LOG_ERROR_("Get train_filename config error.");
 					return -1;
  				}
+                printf("train_filename = %s\n", infbox.train_filename);
  				break;
  			case '?':
  				print_usage(stderr, argv[0]);

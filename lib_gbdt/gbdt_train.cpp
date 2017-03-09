@@ -127,6 +127,7 @@ int read_train_file(
 
 int main(int argc, char* argv[])
 {
+    cout << "--- Start ... ----" << endl;
 	double *x = NULL;
 	double *y = NULL;
 
@@ -134,7 +135,7 @@ int main(int argc, char* argv[])
 
 	char log_message[BUFFER_LENGTH];
 
-	LOG_NOTICE_("Reading config ... \n");
+	LOG_NOTICE_("--- Reading config ... ---\n");
 
 	int res = read_conf_file(infbox, argc, argv);
 
@@ -148,9 +149,9 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	LOG_NOTICE_("Done.\n");
+	LOG_NOTICE_("--- Reading config done. ---\n");
 
-	snprintf(log_message, BUFFER_LENGTH, "Reading training data from: %s ...\n", infbox.train_filename);
+	snprintf(log_message, BUFFER_LENGTH, "--- Reading training data from: %s ... ---\n", infbox.train_filename);
 	LOG_NOTICE_(log_message);
 
 	if(read_train_file(x, y, infbox) != 0)
@@ -159,9 +160,9 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	LOG_NOTICE_("Done.\n");
+	LOG_NOTICE_("--- Reading training data done. ---\n");
 
-	LOG_NOTICE_("Training...\n");
+	LOG_NOTICE_("--- Training... ---\n");
 
 	gbdt_model_t* gbdt_model = gbdt_regression_train(x, y, infbox);
 	if(gbdt_model == NULL)
@@ -170,15 +171,15 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	LOG_NOTICE_("Done.\n");
+	LOG_NOTICE_("--- Training done. ---\n");
 
-	LOG_NOTICE_("Saving Model ... \n");
+	LOG_NOTICE_("--- Saving Model ... ---\n");
 	if(gbdt_save_model(gbdt_model, infbox.model_filename) != 0)
 	{
 		LOG_ERROR_("Saving Model Failed.\n");
 		return -1;
 	}
-	LOG_NOTICE_("Done.\n");
+	LOG_NOTICE_("--- Saving Model done. ---\n");
 
 	free_model(gbdt_model);
 	if(x != NULL)
