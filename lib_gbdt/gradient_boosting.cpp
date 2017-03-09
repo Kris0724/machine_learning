@@ -226,7 +226,7 @@ int gbdt_single_tree_estimation(
  	double avg = 0.0;
  	for (int i = 0; i < gbdt_inf.sample_num; ++i) 
 		avg = (i * avg + y_gradient[index[i]]) / (i + 1); 
- 	
+    //cout << "avg1:"	 << avg << endl;
  	gbdt_single_tree->ndavg[0] = avg;
 	if (gbdt_single_tree->ndcount[0] <= gbdt_inf.gbdt_min_node_size) 
  	{
@@ -410,8 +410,8 @@ int gbdt_regression_predict(gbdt_model_t* gbdt_model, double *x_test, double& yp
 			{
 			return -1;
 			}
-            cout << "vs1:" << res << endl;
-            gbdt_tree_dfs(gbdt_model->reg_forest[i]);
+            //cout << "vs1:" << res << endl;
+            //gbdt_tree_dfs(gbdt_model->reg_forest[i]);
  		}
  		else
 			return -1;
@@ -440,7 +440,11 @@ int gbdt_tree_predict(double *x_test, gbdt_tree_t *gbdt_single_tree, double& ypr
 			k = gbdt_single_tree->rson[k];
  		}
  	}
+    //cout << "gbdt_single_tree->ndavg[" << k << "]:" << gbdt_single_tree->ndavg[k] << endl;
+    // shrink¿¿¿¿¿¿¿¿¿¿¿¿¿¿shrink¿¿¿¿¿¿¿¿¿¿¿¿¿
  	ypred += shrink * gbdt_single_tree->ndavg[k];
+    //cout << "shrink:" << shrink << endl;
+    //cout << "ypred:" << ypred << endl;
     return k;
     //Kris
  	//return 0;
@@ -841,6 +845,7 @@ gbdt_model_t* gbdt_regression_train(double *x_fea_value, double *y_result_score,
     LOG_NOTICE_(message);
  	for (int j = 0; j < infbox.tree_num; ++j) // 
  	{
+        //cout << "num:" << j << endl;
 #		ifdef DEBUG
  		printf("Tree: %d\n", j);
 #		endif
@@ -905,7 +910,7 @@ gbdt_model_t* gbdt_regression_train(double *x_fea_value, double *y_result_score,
 				x_test[k] = x_fea_value[i * infbox.fea_num + k];
  			}
  			gbdt_tree_predict(x_test, gbdt_model->reg_forest[j], y_pred[i], infbox.shrink);
- 			y_gradient[i] = y_result_score[i] - y_pred[i];
+ 			y_gradient[i] = y_result_score[i] - y_pred[i]; // ¿¿¿¿,¿shrink¿¿,shrink¿¿,¿¿¿¿¿¿¿¿¿¿,shrink¿¿¿¿¿¿¿¿¿¿shrink¿¿
 		}
  	}
  	/* ===== end of tree iterations =====*/

@@ -2,3 +2,4 @@
 
 #./do_gbdt -r 0.8 -t 100 -s 0.03 -n 30 -d 5 -m test.model -f train 
 ./gbdt-train -r 0.8 -t 100 -s 0.03 -n 30 -d 5 -m test.model -f train 
+#./gbdt-train -r 0.8 -t 100 -s 1.0 -n 30 -d 5 -m test.model -f train 
