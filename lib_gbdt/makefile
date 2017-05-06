@@ -29,16 +29,16 @@ libgbdt.a : gradient_boosting.o
 	ar rcv $@ $^
 
 gbdt-train : gbdt_train.o libgbdt.a
-	$(CC) -o $@ $^ $(INCLUDE) $(LIB) -DTEST_MAIN $(DEBUG_CPPFLAGS)
+	$(CC) -o $@ $^ $(INCLUDE) $(LIB) -DTEST_MAIN -g $(DEBUG_CPPFLAGS)
 
 gbdt-test : gbdt_test.o libgbdt.a
-	$(CC) -o $@ $^ $(INCLUDE) $(LIB) -DTEST_MAIN $(DEBUG_CPPFLAGS)
+	$(CC) -o $@ $^ $(INCLUDE) $(LIB) -DTEST_MAIN -g $(DEBUG_CPPFLAGS)
 
 gbdt.so : gbdt_rabbit.o libgbdt.a
-	$(CC) -shared -o $@ $^ $(LIB) -DTEST_MAIN $(DEBUG_CPPFLAGS)
+	$(CC) -shared -o $@ $^ $(LIB) -DTEST_MAIN -g $(DEBUG_CPPFLAGS)
 
 %.o : %.cpp
-	$(CC) -c -o $@ $^ $(INCLUDE) $(DEBUG_CPPFLAGS) $(INCLUDE)
+	$(CC) -c -o $@ $^ $(INCLUDE) -g $(DEBUG_CPPFLAGS) $(INCLUDE)
 
 OUTPUT_DIR = ./output
 LIB_DIR = $(OUTPUT_DIR)/lib
